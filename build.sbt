@@ -55,11 +55,13 @@ val database = Seq(
 )
 
 libraryDependencies ++= joda ++ unfiltered ++ database ++ Seq(
-  "org.ini4j"              %  "ini4j"                 % "0.5.2",
-  "org.constretto"         %% "constretto-scala"      % "1.1",
-  "net.hamnaberg.rest"     %% "scala-json-collection" % "2.3",
-  "commons-io"             %  "commons-io"            % "2.3",
-  "org.scalatest"          %  "scalatest_2.11"        % "2.2.4"   % "test"
+  "net.databinder.dispatch" %% "dispatch-core"         % "0.11.2",
+  "org.ini4j"               %  "ini4j"                 % "0.5.2",
+  "org.constretto"          %% "constretto-scala"      % "1.1",
+  "net.hamnaberg.rest"      %% "scala-json-collection" % "2.3",
+  "commons-io"              %  "commons-io"            % "2.3",
+  "org.scalatest"           %  "scalatest_2.11"        % "2.2.4"   % "test"
+
 )
 
 pomIncludeRepository := {
