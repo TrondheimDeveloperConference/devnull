@@ -1,7 +1,9 @@
 package devnull.ems
 
+import java.time.LocalDateTime
 import java.util.UUID
 
+import devnull.ems.helpers.UtcLocalDateTime
 import dispatch.Defaults._
 import dispatch._
 import net.hamnaberg.json.collection.Value.StringValue
@@ -11,7 +13,7 @@ import JsonCollcetionHelpers._
 
 import scala.language.postfixOps
 
-case class TimeSlot(start: String, end: String)
+case class TimeSlot(start: LocalDateTime, end: LocalDateTime)
 case class EventInfo(event: Event, sessionId: UUID, timeSlot: Option[TimeSlot])
 case class Session(published: Boolean)
 
@@ -41,7 +43,7 @@ abstract class EmsDataFetcher(emsUrl: String) extends Client{
     val timeslot = for {
       link <- item.links.find(_.rel == "slot item")
       prompt <- link.prompt
-      (startTime, endTime) <- prompt.split('+') match {
+      (startTime, endTime) <- prompt.split('+').map(UtcLocalDateTime.parse) match {
         case Array(p1, p2) => Some((p1, p2))
         case _ => None
       }

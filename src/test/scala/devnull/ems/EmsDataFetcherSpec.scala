@@ -3,6 +3,7 @@ package devnull.ems
 import java.net.URI
 import java.util.UUID
 
+import devnull.ems.helpers.UtcLocalDateTime
 import dispatch.Future
 import net.hamnaberg.json.collection._
 import org.scalatest.{FunSpec, Matchers}
@@ -17,11 +18,11 @@ class EmsDataFetcherSpec extends FunSpec with Matchers {
   it("should fetch a published event with time slot") {
     trait MockClient extends Client {
       override def client(url: String): Future[JsonCollection] = {
-        val m ="(.*)/.*".r
+        val m = "(.*)/.*".r
         url match {
           case "base" => Future {
             val eventLinks = List(Link(URI.create("events/" + UUID.randomUUID().toString), "event collection"))
-            JsonCollection(URI.create("base"),eventLinks, List())
+            JsonCollection(URI.create("base"), eventLinks, List())
           }
           case m("events") => Future {
             val sessionUri = URI.create("sessions/" + UUID.randomUUID().toString)
@@ -50,17 +51,19 @@ class EmsDataFetcherSpec extends FunSpec with Matchers {
 
     eventInfos should have size 1
     eventInfos.head.event.name should be("JavaZone 2015")
-    eventInfos.head.timeSlot should be(Some(TimeSlot("2014-09-10T14:10:00Z", "2014-09-10T14:20:00Z")))
+    eventInfos.head.timeSlot should be(Some(TimeSlot(
+      UtcLocalDateTime.parse("2014-09-10T14:10:00Z"),
+      UtcLocalDateTime.parse("2014-09-10T14:20:00Z"))))
   }
 
   it("should fail when the client future cast an exception") {
     trait MockClient extends Client {
       override def client(url: String): Future[JsonCollection] = {
-        val m ="(.*)/.*".r
+        val m = "(.*)/.*".r
         url match {
           case "base" => Future {
             val eventLinks = List(Link(URI.create("events/" + UUID.randomUUID().toString), "event collection"))
-            JsonCollection(URI.create("base"),eventLinks, List())
+            JsonCollection(URI.create("base"), eventLinks, List())
           }
           case m("events") => Future {
             throw new RuntimeException("Exception in event future")
