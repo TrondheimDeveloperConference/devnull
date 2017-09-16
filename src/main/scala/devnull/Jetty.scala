@@ -50,7 +50,7 @@ object Jetty extends InitApp[AppConfig, AppReference] {
     }.requestLogging("access.log")
 
     server.underlying.setSendDateHeader(true)
-    server.run(_ => logger.info("Running server at " + cfg.httpPort))
+    server.run(_ => logger.info(s"Running server at ${cfg.httpPort}${cfg.httpContextPath}"))
     AppReference(server)
   }
 
@@ -61,6 +61,10 @@ object Jetty extends InitApp[AppConfig, AppReference] {
     val contextPath = propOrElse("contextPath", envOrElse("CONTEXT_PATH", "/server"))
     val home = new File(propOrElse("app.home", envOrElse("app.home", ".")))
     val emsUrl = propOrElse("emsUrl", envOrElse("EMS_URL", "http://test.javazone.no/ems/server/"))
+    logger.info(s"port ${port}")
+    logger.info(s"contextPath ${contextPath}")
+    logger.info(s"home ${home}")
+    logger.info(s"emsUrl ${emsUrl}")
 
     val dbConfig = DatabaseConfigEnv()
     AppConfig(port, contextPath, home, dbConfig, emsUrl)

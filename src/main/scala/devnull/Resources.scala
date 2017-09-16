@@ -23,7 +23,7 @@ class Resources(feedbackResource: SessionFeedbackResource, eventFeedbackResource
 
   val cors = Cors(
     CorsConfig(
-      (origin: String) => {origin.contains("javazone.no")},
+      (origin: String) => {origin.contains("trondheimdc.no")},
       (method: String) => List("POST", "GET").contains(method),
       (headers: List[String]) => true,
       allowCredentials = true,
