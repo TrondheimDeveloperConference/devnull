@@ -7,7 +7,7 @@ COPY build.sbt /tmp/
 WORKDIR /tmp/
 RUN sbt appmgr:packageBin
 
-FROM openjdk:8-jdk-alpine
+FROM openjdk:8-jdk
 COPY --from=SCALA_TOOL_CHAIN /tmp/target/appmgr/root /devnull
 ADD docker/wait-for-it.sh /
 ENV app.home /devnull
